@@ -1,26 +1,29 @@
-// src/pages/BikeManagement/ViewBikes.js
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ViTable from "../../../components/ViTable";
+import { getAllBikes } from "../../../services/bikeAPI"; // Import the getAllBikes function
+
 const ViewBikes = () => {
   const [bikes, setBikes] = useState([]);
 
   useEffect(() => {
-    // Logic to fetch bikes (API call or local storage)
-    const fetchedBikes = [
-      { id: 1, name: "Bike A", model: "Model A", price: "1000", color: "Red", year: "2020" },
-      { id: 2, name: "Bike B", model: "Model B", price: "1200", color: "Blue", year: "2021" },
-      { id: 3, name: "Bike C", model: "Model C", price: "1500", color: "Black", year: "2022" },
-    ];
-    setBikes(fetchedBikes);
+    const fetchBikes = async () => {
+      try {
+        const fetchedBikes = await getAllBikes(); // Fetch bikes from the server
+        setBikes(fetchedBikes);
+      } catch (error) {
+        console.error("Error fetching bikes:", error);
+      }
+    };
+
+    fetchBikes();
   }, []);
 
   const tableHeaders = [
-    { label: "Bike Name", key: "name" },
-    { label: "Model", key: "model" },
+    { label: "Bike Name", key: "bike_name" },
+    { label: "Description", key: "description" },
     { label: "Price", key: "price" },
-    { label: "Color", key: "color" },
-    { label: "Manufacture Year", key: "year" },
+    { label: "Image", key: "bike_image", type: "image" }, // Display the bike image
   ];
 
   const actions = [

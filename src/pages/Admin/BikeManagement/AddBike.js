@@ -32,32 +32,45 @@ const AddBike = () => {
   const handleFileChange = (event) => {
     setBikeImage(event.target.files[0]);
   };
-
   const handleAddBike = async () => {
     if (!bikeName || !bikeDescription || !bikePrice || !bikeImage) {
       setErrorMessage('All fields are required.');
       return;
     }
-
-    if (isNaN(bikePrice) || parseFloat(bikePrice) <= 0) {
+  
+    // Ensure the price is a valid number before submitting
+    const parsedPrice = parseFloat(bikePrice);
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
       setErrorMessage('Price must be a valid positive number.');
       return;
     }
-
+  
     try {
       const formData = new FormData();
       formData.append('bike_name', bikeName);
       formData.append('description', bikeDescription);
-      formData.append('price', parseFloat(bikePrice));
+      formData.append('price', parsedPrice); // Send the numeric value
       formData.append('bike_image', bikeImage);
-
-      await insertBike(formData);
+  
+      const response = await insertBike(formData);
+  
+      // Log the response status and error message for better debugging
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error details:', errorData);
+        throw new Error(errorData.message || 'Failed to add bike');
+      }
+  
+      const data = await response.json();
+      console.log('Bike added successfully:', data);
       navigate('/admin/bike-management/view');
     } catch (error) {
-      const errorMessage = error.response?.data?.error || 'Failed to add bike';
+      const errorMessage = error.message || 'Failed to add bike';
       setErrorMessage(errorMessage);
+      console.error('Error:', error); // Log the entire error object for debugging
     }
   };
+  
 
   return (
     <div>
