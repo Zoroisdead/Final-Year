@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import ViTextInput from "../../../components/ViTextInput";
 import ViMessage from "../../../components/ViMessage";
-import { insertBike } from "../../../services/bikeAPI";
-
+import { uploadImageToCloudinary } from "../../../config/uploadImageToCloudinary";
 const AddBike = () => {
   const navigate = useNavigate();
   const [bikeName, setBikeName] = useState('');
@@ -45,13 +45,26 @@ const AddBike = () => {
     }
 
     try {
-      const formData = new FormData();
-      formData.append('bike_name', bikeName);
-      formData.append('description', bikeDescription);
-      formData.append('price', parseFloat(bikePrice));
-      formData.append('bike_image', bikeImage);
+      // Upload image to Cloudinary
+      const imageUrl = await uploadImageToCloudinary(bikeImage);
 
-      await insertBike(formData);
+      if (!imageUrl) {
+        setErrorMessage('Failed to upload image.');
+        return;
+      }
+
+      // Prepare bike details
+      const bikeDetails = {
+        bike_name: bikeName,
+        description: bikeDescription,
+        price: parseFloat(bikePrice),
+        bike_image: imageUrl,
+      };
+
+      // Save bike details to the API endpoint
+      await axios.post('https://66d728f9006bfbe2e6500b43.mockapi.io/test', bikeDetails);
+
+      // Navigate to the view bikes page
       navigate('/admin/bike-management/view');
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Failed to add bike';
