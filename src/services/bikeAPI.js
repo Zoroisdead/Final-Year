@@ -9,21 +9,32 @@ export const getAllBikes = async () => {
 
 // Insert a new bike
 export const insertBike = async (bikeData) => {
-  // Using FormData for multipart/form-data
-  const formData = new FormData();
-  formData.append('bike_name', bikeData.bike_name);
-  formData.append('description', bikeData.description);
-  formData.append('price', bikeData.price);
-  if (bikeData.bike_image) {
-    formData.append('bike_image', bikeData.bike_image);
-  }
-
-  return handleRequest(() => axios.post(`${BASE_URL}/add`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
+  try {
+    // Create a FormData object to append the bike data
+    const formData = new FormData();
+    formData.append('bike_name', bikeData.bike_name);
+    formData.append('description', bikeData.description);
+    formData.append('price', bikeData.price);
+    
+    // Add image if available
+    if (bikeData.bike_image) {
+      formData.append('bike_image', bikeData.bike_image);
     }
-  }));
+
+    // Make the POST request with the form data
+    const response = await axios.post(`${BASE_URL}/add`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+
+    return response.data; // Return the response data from the server
+  } catch (error) {
+    console.error('Error submitting bike data:', error);
+    throw new Error('An error occurred while adding the bike.');
+  }
 };
+
 
 // Delete a bike by ID
 export const deleteBike = async (bikeId) => {

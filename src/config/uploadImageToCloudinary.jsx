@@ -3,8 +3,7 @@ import cloudinary from '../config/cloudinary';
 export const uploadImageToCloudinary = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET); // Use process.env
- console.log(process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
+  formData.append('upload_preset', "Images"); // Use process.env
   // Determine the resource type based on file type (PDFs will use 'raw', images use 'image')
   const resourceType = file.type.includes('pdf') ? 'raw' : 'image';
 

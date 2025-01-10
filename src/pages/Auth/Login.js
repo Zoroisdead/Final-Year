@@ -56,6 +56,7 @@ const Login = () => {
 
       login(adminUser); // Update context with admin data
       localStorage.setItem('token', 'admin-token'); // Simulating a token for admin login
+      localStorage.setItem('userId', 'admin'); // Save admin user ID
 
       setSuccessMessage('Admin login successful! Redirecting...');
       setTimeout(() => {
@@ -76,6 +77,7 @@ const Login = () => {
 
       login(user); // Update context with user data
       localStorage.setItem('token', token);
+      localStorage.setItem('userId', user.id); // Save user ID in localStorage
 
       setSuccessMessage('Login successful! Redirecting...');
       setTimeout(() => {

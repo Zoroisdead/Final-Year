@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 
 // Function to get all users
 const getAllUsers = async () => {
-  const query = 'SELECT email, password FROM users';
+  const query = 'SELECT * FROM users';
   const result = await pool.query(query);
   return result.rows; // Returns an array of user records
 };

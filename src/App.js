@@ -2,7 +2,7 @@ import React from 'react';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home/Home'; 
+import Home from './pages/Home/Home';
 import ExploreBikes from './pages/User/ExploreBikes';
 import Rent from './pages/User/Rent';
 import './App.css';
@@ -45,21 +45,21 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/events" element={<Events />} />
-        <Route path="/about" element={<About />} /> 
-        <Route path="/contact" element={<Contact />} /> 
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/checkout" element={<CheckOut />} />
-        <Route path="/eventsinfo" element={<EventInfo />} /> 
-        <Route path="/profile" element={<UserProfile />} /> 
+        <Route path="/eventsinfo" element={<EventInfo />} />
+        <Route path="/profile" element={<UserProfile />} />
 
         <Route path="/admin" element={<Layout />}>
-  {/* <Route path="user-management" element={<UserManagement />} /> */}
-  <Route path="bike-management/add" element={<AddBike />} />
-  <Route path="bike-management/edit/:id" element={<EditBike />} />
-  <Route path="bike-management/view" element={<ViewBikes />} />
-  <Route path="bike-management/available" element={<AvailableBikes />} />
-  <Route path="rented-bikes" element={<RentedBikes />} />
-  <Route path="admindashboard" element={<AdminDashboard />} />
-</Route>
+          {/* <Route path="user-management" element={<UserManagement />} /> */}
+          <Route path="bike-management/add" element={<AddBike />} />
+          <Route path="bike-management/edit/:id" element={<EditBike />} />
+          <Route path="bike-management/view" element={<ViewBikes />} />
+          <Route path="bike-management/available" element={<AvailableBikes />} />
+          <Route path="rented-bikes" element={<RentedBikes />} />
+          <Route path="admindashboard" element={<AdminDashboard />} />
+        </Route>
       </Routes>
     </Router>
   );

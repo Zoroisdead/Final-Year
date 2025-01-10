@@ -10,19 +10,20 @@ function Rent() {
   const location = useLocation();
   const navigate = useNavigate();
   const { bike } = location.state || {
-    name: "Bajaj Pulsar 150",
-    image: "/assets/default-bike.jpg",
+    bike_name: "Bajaj Pulsar 150",
+    bike_image: "/assets/default-bike.jpg",
     description: "Standard Bike",
     price: 11.44,
     location: "J P Marg, Kathmandu",
   };
 
   const [rentalDates, setRentalDates] = useState({
-    startDate: "2024-12-14",
-    endDate: "2024-12-15",
-    pickupTime: "10:00",
+    startDate: new Date().toISOString().slice(0, 10),
+    endDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().slice(0, 10),
+    pickupTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), // Current time in HH:MM format
     dropoffTime: "10:00",
   });
+  
 
   const [totalPrice, setTotalPrice] = useState(bike.price); // Initialize with the daily price
 
@@ -53,22 +54,22 @@ function Rent() {
 
   const recommendedBikes = [
     {
-      name: "Royal Enfield Classic 350",
-      image: Bike4,
+      bike_name: "Royal Enfield Classic 350",
+      bike_image: Bike4,
       description: "A classic touring bike.",
       price: 15.99,
       location: "Thamel, Kathmandu",
     },
     {
-      name: "Honda Shine 125",
-      image: Bike5,
+      bike_name: "Honda Shine 125",
+      bike_image: Bike5,
       description: "A lightweight city bike.",
       price: 9.99,
       location: "New Road, Kathmandu",
     },
     {
-      name: "KTM Duke 200",
-      image: Bike6,
+      bike_name: "KTM Duke 200",
+      bike_image: Bike6,
       description: "A sporty bike for thrill-seekers.",
       price: 19.99,
       location: "Baneshwor, Kathmandu",
@@ -87,10 +88,10 @@ function Rent() {
         <div className="bike-details-policy">
           <div className="bike-details">
             <div className="bike-image">
-              <img src={bike.image} alt={bike.name} />
+              <img src={bike.bike_image} alt={bike.bike_name} />
             </div>
             <div className="bike-info">
-              <h1>{bike.name}</h1>
+              <h1>{bike.bike_name}</h1>
               <p className="bike-specs">Location: {bike.location}</p>
               <p className="bike-specs">{bike.description}</p>
             </div>
@@ -112,37 +113,40 @@ function Rent() {
         {/* Right Section */}
         <div className="rental-summary">
           <h2>{calculateRentalDays(rentalDates.startDate, rentalDates.endDate)} Day Rental</h2>
-          <p className="rental-price">{totalPrice.toFixed(2)} €</p>
+          <p className="rental-price">{totalPrice.toFixed(2)} Rs/Hr</p>
           <div className="rental-form">
-            <label>Rental Dates:</label>
-            <input
-              type="date"
-              name="startDate"
-              value={rentalDates.startDate}
-              onChange={handleDateChange}
-            />
-            to
-            <input
-              type="date"
-              name="endDate"
-              value={rentalDates.endDate}
-              onChange={handleDateChange}
-            />
-            <label>Pickup:</label>
-            <input
-              type="time"
-              name="pickupTime"
-              value={rentalDates.pickupTime}
-              onChange={handleDateChange}
-            />
-            <label>Dropoff:</label>
-            <input
-              type="time"
-              name="dropoffTime"
-              value={rentalDates.dropoffTime}
-              onChange={handleDateChange}
-            />
-          </div>
+  <label>Rental Dates:</label>
+  <input
+    type="date"
+    name="startDate"
+    value={rentalDates.startDate}
+    onChange={handleDateChange}
+    min={new Date().toISOString().slice(0, 10)} // Prevent past dates
+  />
+  to
+  <input
+    type="date"
+    name="endDate"
+    value={rentalDates.endDate}
+    onChange={handleDateChange}
+    min={rentalDates.startDate} // Prevent selecting dates before the start date
+  />
+  <label>Pickup:</label>
+  <input
+    type="time"
+    name="pickupTime"
+    value={rentalDates.pickupTime}
+    onChange={handleDateChange}
+  />
+  <label>Dropoff:</label>
+  <input
+    type="time"
+    name="dropoffTime"
+    value={rentalDates.dropoffTime}
+    onChange={handleDateChange}
+  />
+</div>
+
           <Link
             to="/checkout"
             className="checkout-btn"
@@ -160,9 +164,9 @@ function Rent() {
         <div className="recommended-bikes">
           {recommendedBikes.map((bike, index) => (
             <div key={index} className="bike-card">
-              <img src={bike.image} alt={bike.name} />
+              <img src={bike.bike_image} alt={bike.bike_name} />
               <div className="bike-card-info">
-                <h3>{bike.name}</h3>
+                <h3>{bike.bike_name}</h3>
                 <p>{bike.description}</p>
                 <p className="bike-price">{bike.price} € / day</p>
                 <button onClick={() => handleBikeSelect(bike)}>

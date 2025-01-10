@@ -1,93 +1,116 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 
-const RentedBikes = () => {
-  const [rentedBikes, setRentedBikes] = useState([]);
+const Rented = () => {
+  const [checkoutData, setCheckoutData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Replace with actual API call or logic to fetch rented bikes
-    const fetchedRentedBikes = [
-      {
-        id: 1,
-        bikeName: "Bike A",
-        renterName: "John Doe",
-        rentDuration: "3 days",
-        startDate: "2024-12-01",
-        endDate: "2024-12-03",
-        rentPrice: 300,
-      },
-      {
-        id: 2,
-        bikeName: "Bike B",
-        renterName: "Jane Smith",
-        rentDuration: "5 days",
-        startDate: "2024-12-02",
-        endDate: "2024-12-07",
-        rentPrice: 500,
-      },
-    ];
-    setRentedBikes(fetchedRentedBikes);
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/checkout/rented');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const result = await response.json();
+        setCheckoutData(result.data); // Update state with fetched data
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const handleViewDetails = (bikeId) => {
-    // Placeholder for logic
-    console.log(`View details for bike ID: ${bikeId}`);
+  const handleAccept = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/checkout/accept/${id}`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to accept the rental');
+      }
+
+      // Optionally, update the local state to reflect the accepted status
+      const updatedData = checkoutData.map(item =>
+        item.id === id ? { ...item, status: 'Accepted' } : item
+      );
+      setCheckoutData(updatedData);
+
+      alert('Rental request accepted!');
+    } catch (error) {
+      alert('Error: ' + error.message);
+    }
   };
 
-  const handleExtendRent = (bikeId) => {
-    // Placeholder for logic
-    console.log(`Extend rent for bike ID: ${bikeId}`);
+  const handleDecline = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/checkout/decline/${id}`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to decline the rental');
+      }
+
+      // Optionally, update the local state to reflect the declined status
+      const updatedData = checkoutData.filter(item => item.id !== id);
+      setCheckoutData(updatedData);
+
+      alert('Rental request declined!');
+    } catch (error) {
+      alert('Error: ' + error.message);
+    }
   };
 
-  const handleReturnBike = (bikeId) => {
-    // Placeholder for logic
-    console.log(`Return bike with ID: ${bikeId}`);
-  };
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div>
       <h1>Rented Bikes</h1>
-      {rentedBikes.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Bike Name</th>
-              <th>Renter Name</th>
-              <th>Rent Duration</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Rent Price</th>
-              <th>Actions</th>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Bike Name</th>
+            <th>Bike Image</th>
+            <th>Price</th>
+            <th>License</th>
+            <th>Actions</th> {/* New column for actions */}
+          </tr>
+        </thead>
+        <tbody>
+          {checkoutData.map((item, index) => (
+            <tr key={index}>
+              <td>{item.name}</td>
+              <td>{item.phone}</td>
+              <td>{item.address}</td>
+              <td>{item.bike_name}</td>
+              <td><img src={item.bike_image} alt={item.bike_name} width="100" /></td>
+              <td>{item.price}</td>
+              <td><img src={item.license} alt={item.bike_name} width="100" /></td>
+              <td>
+                {/* Accept and Decline buttons */}
+                <button className='btn btn-primary' onClick={() => handleAccept(item.id)}>Accept</button>
+                <button className='btn btn-danger' onClick={() => handleDecline(item.id)}>Decline</button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {rentedBikes.map((bike) => (
-              <tr key={bike.id}>
-                <td>{bike.bikeName}</td>
-                <td>{bike.renterName}</td>
-                <td>{bike.rentDuration}</td>
-                <td>{bike.startDate}</td>
-                <td>{bike.endDate}</td>
-                <td>${bike.rentPrice}</td>
-                <td>
-                  <button className="btn btn-primary" onClick={() => handleViewDetails(bike.id)}>
-                    View Details
-                  </button>
-                  <button className="btn btn-secondary" onClick={() => handleExtendRent(bike.id)}>
-                    Extend Rent
-                  </button>
-                  <button className="btn btn-danger" onClick={() => handleReturnBike(bike.id)}>
-                    Return Bike
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No bikes are currently rented.</p>
-      )}
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default RentedBikes;
+export default Rented;

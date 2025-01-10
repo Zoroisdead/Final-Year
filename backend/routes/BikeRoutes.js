@@ -19,6 +19,7 @@ router.get('/', bikeController.getAllBikes);
 //   bikeController.addBike
 // );
 
+
 router.post(
   '/add',
   upload.single('bike_image'), // Middleware for handling file uploads

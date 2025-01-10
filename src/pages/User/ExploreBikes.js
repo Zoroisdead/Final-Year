@@ -1,54 +1,56 @@
-import React, { useState } from 'react';
-import Navbar from '../../components/Navbar';
-import { useNavigate } from 'react-router-dom';
-import Bike1 from '../../assets/Bike1.jpg';
-import Bike2 from '../../assets/Bike2.jpg';
-import Bike3 from '../../assets/Bike3.jpg';
-import Bike4 from '../../assets/Bike4.jpg';
-import Bike5 from '../../assets/Bike5.jpg';
-import Bike6 from '../../assets/Bike6.jpg';
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/Navbar";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function ExploreBikes() {
-  const bikes = [
-  { id: 1, name: 'Mountain Bike', image: Bike1, price: 20, description: 'Perfect for rugged terrains and outdoor adventures.' },
-  { id: 2, name: 'Road Bike', image: Bike2, price: 15, description: 'Ideal for smooth city roads and long-distance rides.' },
-  { id: 3, name: 'Electric Bike', image: Bike3, price: 25, description: 'Eco-friendly bike with electric assist for easy rides.' },
-  { id: 4, name: 'Hybrid Bike', image: Bike4, price: 18, description: 'A mix of road and mountain bike features for versatile riding.' },
-  { id: 5, name: 'City Bike', image: Bike5, price: 12, description: 'Lightweight and easy to navigate in the city.' },
-  { id: 6, name: 'Cruiser Bike', image: Bike6, price: 22, description: 'Comfortable bike for casual rides around town.' },
-];
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState('All');
+  const [bikes, setBikes] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedType, setSelectedType] = useState("All");
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(50);
-  const navigate = useNavigate();  // Use useNavigate hook for navigation
+  const [maxPrice, setMaxPrice] = useState(5000); // Adjust max price to a high value to include all bikes
+  const navigate = useNavigate(); // Use useNavigate hook for navigation
+
+  // Fetch bike data from mock API
+  useEffect(() => {
+    const fetchBikes = async () => {
+      try {
+        const response = await axios.get("https://66d728f9006bfbe2e6500b43.mockapi.io/test");
+        console.log("Fetched bikes data:", response.data); // Log the fetched data
+        setBikes(response.data); // Populate bikes state with fetched data
+      } catch (error) {
+        console.error("Error fetching bikes:", error);
+      }
+    };
+
+    fetchBikes();
+  }, []);
 
   // Filter bikes based on search query, selected type, and price range
   const filteredBikes = bikes.filter((bike) => {
-    const matchesSearch = bike.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = selectedType === 'All' || bike.type === selectedType;
+    const matchesSearch = bike.bike_name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesType = selectedType === "All" || bike.type === selectedType;
     const matchesPrice = bike.price >= minPrice && bike.price <= maxPrice;
 
     return matchesSearch && matchesType && matchesPrice;
   });
 
+  // Log filtered bikes to check the filtering logic
+  console.log("Filtered bikes:", filteredBikes);
+
   const handleRentNow = (bike) => {
     // Redirect to Rent.js page and pass bike details via state
-    navigate('/rent', { state: { bike } });
+    navigate("/rent", { state: { bike } });
   };
 
   return (
     <div>
       <Navbar />
       <section className="explore-header">
-  <h1>Explore Our Bikes</h1>
-  <p>Browse through a wide selection of bikes available for rent. Find your perfect ride today!</p>
-</section>
-      <div className="explore-bikes-container">
         <h1>Explore Our Bikes</h1>
-        <p>Browse through a wide selection of bikes available for rent.</p>
-
+        <p>Browse through a wide selection of bikes available for rent. Find your perfect ride today!</p>
+      </section>
+      <div className="explore-bikes-container">
         {/* Search and Filter combined */}
         <div className="search-filter-bar">
           <input
@@ -96,11 +98,15 @@ function ExploreBikes() {
         <div className="bike-grid">
           {filteredBikes.map((bike) => (
             <div key={bike.id} className="bike-card">
-              <img src={bike.image} alt={bike.name} className="bike-image" />
-              <h3>{bike.name}</h3>
-              <p>{bike.description}</p>
-              <p className="price">${bike.price} per hour</p>
-              <button className="rent-btn" onClick={() => handleRentNow(bike)}>Rent Now</button>
+              <img src={bike.bike_image} alt={bike.bike_name} className="bike-image" />
+              <div className="bike-info">
+                <h3>{bike.bike_name}</h3>
+                <p>{bike.description}</p>
+                <p className="price">${bike.price} per hour</p>
+                <button className="rent-btn" onClick={() => handleRentNow(bike)}>
+                  Rent Now
+                </button>
+              </div>
             </div>
           ))}
         </div>

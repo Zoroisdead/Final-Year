@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { insertAllUsers } from "../../services/userAPI";
+import { UserContext } from "../../UserContext"; // Import the UserContext
 
 const SignUp = () => {
   const navigate = useNavigate();
   
+  // Access the UserContext to retrieve the current user (if any)
+  const { user } = useContext(UserContext);
+
   // State for form data, error, and success messages
   const [formData, setFormData] = useState({
     username: "",
@@ -45,7 +49,14 @@ const SignUp = () => {
     }
 
     try {
-      const response = await insertAllUsers({ username, email, password });
+      // Insert new user, including user_id if logged in
+      const response = await insertAllUsers({ 
+        username, 
+        email, 
+        password,
+        user_id: user ? user.id : null // Link the user_id if logged in
+      });
+      
       setSuccessMessage("Signup successful! Redirecting to login...");
       localStorage.setItem("isLogin", "1");
       navigate("/login");
