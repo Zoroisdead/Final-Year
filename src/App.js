@@ -14,7 +14,7 @@ import About from './pages/User/About';
 import Contact from './pages/User/Contact';
 import Login from './pages/Auth/Login';
 import Signup from './pages/Auth/SignUp';
-
+import Footer from './components/Footer';
 import Layout from "./pages/Admin/theme/Layout";
 import UserManagement from "./pages/Admin/BikeManagement/UserManagement";
 // import AddUser from "./pages/Admin/UserManagement/AddUser";
@@ -33,6 +33,7 @@ import AvailableBikes from "./pages/Admin/BikeManagement/AvailableBikes";
 import RentedBikes from "./pages/Admin/BikeManagement/RentedBikes";
 import AdminDashboard from './pages/Admin/BikeManagement/AdminDahboard';
 import UserProfile from './pages/User/UserProfile';
+import Payment from './pages/User/Payment';
 
 function App() {
   return (
@@ -50,6 +51,8 @@ function App() {
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/eventsinfo" element={<EventInfo />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/footer" element={<Footer />} />
 
         <Route path="/admin" element={<Layout />}>
           {/* <Route path="user-management" element={<UserManagement />} /> */}

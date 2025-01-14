@@ -7,7 +7,7 @@ import affordable from "../../assets/saving-money.png";
 import choose from "../../assets/target.png";
 import rent from "../../assets/two.png";
 import ride from "../../assets/ride.png";
-
+import Footer from '../../components/Footer';
 const Home = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -160,7 +160,10 @@ const Home = () => {
         <p>Join thousands of happy riders. Rent a bike today!</p>
         <button className="cta-button">Rent a Bike Now</button>
       </section>
+     
+      <Footer />
     </div>
+    
   );
 };
 

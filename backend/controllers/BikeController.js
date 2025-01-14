@@ -92,6 +92,14 @@ const updateBike = async (req, res) => {
     res.status(500).json({ message: 'Error updating bike', error: error.message });
   }
 };
+// Inside your BikeController
+const deleteRentalRequest = async (checkoutid) => {
+  const query = 'DELETE FROM rentals WHERE checkoutid = ?';
+  await db.execute(query, [checkoutid]);
+};
+
+
+
 
 module.exports = {
   getAllBikes,
@@ -99,4 +107,5 @@ module.exports = {
   getBikeById,
   deleteBike,
   updateBike,
+  deleteRentalRequest
 };

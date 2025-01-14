@@ -15,7 +15,7 @@ const AvailableBikes = () => {
 
   return (
     <div className="available-bikes-container">
-      <h1 className="available-bikes-header">Available Bikes</h1>
+      <h1 className="heading">Available Bikes</h1>
       <ul className="bike-list">
         {availableBikes.map((bike) => (
           <li key={bike.id} className="bike-list-item">

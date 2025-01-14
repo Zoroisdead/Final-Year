@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaUpload } from "react-icons/fa"; // Importing upload icon from react-icons
 import axios from "axios";
 import ViTextInput from "../../../components/ViTextInput";
 import ViMessage from "../../../components/ViMessage";
 import { uploadImageToCloudinary } from "../../../config/uploadImageToCloudinary";
+
 const AddBike = () => {
   const navigate = useNavigate();
   const [bikeName, setBikeName] = useState('');
@@ -11,6 +13,7 @@ const AddBike = () => {
   const [bikePrice, setBikePrice] = useState('');
   const [bikeImage, setBikeImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -30,21 +33,27 @@ const AddBike = () => {
   };
 
   const handleFileChange = (event) => {
-    setBikeImage(event.target.files[0]);
+    const file = event.target.files[0];
+    setBikeImage(file);
+    
+    // Create a preview URL for the selected image
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreview(previewUrl);
   };
+
   const handleAddBike = async () => {
     if (!bikeName || !bikeDescription || !bikePrice || !bikeImage) {
       setErrorMessage('All fields are required.');
       return;
     }
-  
+
     // Ensure the price is a valid number before submitting
     const parsedPrice = parseFloat(bikePrice);
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
       setErrorMessage('Price must be a valid positive number.');
       return;
     }
-  
+
     try {
       // Upload image to Cloudinary
       const imageUrl = await uploadImageToCloudinary(bikeImage);
@@ -73,11 +82,10 @@ const AddBike = () => {
       console.error('Error:', error); // Log the entire error object for debugging
     }
   };
-  
 
   return (
     <div>
-      <h1>Add New Bike</h1>
+      <h1 className="heading">Add New Bike</h1>
       {errorMessage && <ViMessage message={errorMessage} />}
       <ViTextInput
         title="Bike Name"
@@ -98,11 +106,29 @@ const AddBike = () => {
         handleInputChange={handleInputChange}
         placeholder="Enter price in numeric format"
       />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-      />
+      
+      {/* Styled File Upload Box with Image Preview */}
+      <div className="file-upload-container">
+        <label htmlFor="file-input" className="file-upload-label">
+          <FaUpload style={{ marginRight: "8px", fontSize: "20px" }} />
+          Upload Bike Image
+        </label>
+        <input
+          type="file"
+          id="file-input"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="file-input"
+        />
+        <div className="image-container">
+          {imagePreview ? (
+            <img src={imagePreview} alt="Selected Bike" className="image-preview" />
+          ) : (
+            <span></span>
+          )}
+        </div>
+      </div>
+
       <div className="form-group">
         <button onClick={handleAddBike} className="btn-">
           Add Bike

@@ -30,6 +30,18 @@ router.post(
   bikeController.addBike
 );
 
+// Backend: In the router (e.g., 'checkout.js')
+router.delete('/decline/:id', async (req, res) => {
+  const { checkoutid } = req.params;
+  try {
+    // Call the database function to delete the rental request by ID
+    await bikeController.deleteRentalRequest(checkoutid);  // Assuming you have a deleteRentalRequest function
+    res.status(200).json({ message: 'Rental request declined and deleted.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to decline and delete rental request.' });
+  }
+});
+
 
 // Fetch a bike by ID
 router.get(

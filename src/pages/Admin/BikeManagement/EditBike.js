@@ -68,7 +68,7 @@ const EditBike = () => {
 
   return (
     <div>
-      <h1>Edit Bike</h1>
+      <h1 className="heading">Edit Bike</h1>
       {errorMessage && <ViMessage message={errorMessage} />}
       <ViTextInput
         title="Bike Name"

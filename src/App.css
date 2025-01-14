@@ -361,11 +361,14 @@
 /* Event Header Section */
 .event-header {
   text-align: center;
-  height: 140px;
+  height: 200px;
   padding: 30px;
   background-color: #f39c12;
   color: white;
-
+  background-image: url('../src/assets/event.jpg'); /* Path to your background image */
+  background-size: 1550px 347px;
+  background-position: center; /* Centers the background image */
+background-repeat: no-repeat;
 }
 
 .event-header h1 {
@@ -641,19 +644,26 @@
 }
 .explore-header {
   text-align: center;
-  height: 140px; /* Maintain consistent height */
+  height: 200px; /* Maintain consistent height */
   padding: 30px;
   background-color: #f39c12;
   color: white;
+  background-image: url('../src/assets/explore.jpg'); /* Path to your background image */
+  background-size: 1550px 480px;
+  background-position: center; /* Centers the background image */
+background-repeat: no-repeat;
 }
+
 
 .explore-header h1 {
   font-size: 36px; 
   margin-bottom: 15px; 
   text-transform: uppercase; 
+  text-align: center;
 }
 
 .explore-header p {
+  text-align: center;
   font-size: 18px; 
   margin-top: 10px;
   line-height: 1.5; 
@@ -754,7 +764,7 @@
   font-size: 1.2rem;
   margin-top: 10px;
   font-weight: bold;
-  color: #333;
+  color: #ff6347;
 }
 
 .rent-btn {
@@ -795,13 +805,6 @@
   }
 }
 /* General Styles */
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f5f7fa;
-  color: #333;
-}
 
 .rent-container {
   display: flex;
@@ -813,7 +816,7 @@ body {
   padding: 20px;
   box-sizing: border-box;
 }
-
+/* 
 /* Bike Details Section */
 .bike-details {
   flex: 1;
@@ -856,7 +859,7 @@ body {
   font-size: 1rem;
   color: #34495e;
   margin-top: 10px;
-}
+} */
 
 /* Rental Form Section */
 .rental-summary {
@@ -877,7 +880,7 @@ body {
 
 .rental-price {
   font-size: 1.5rem;
-  color: #e67e22;
+  color: #007bff;
   margin-bottom: 20px;
 }
 
@@ -964,13 +967,6 @@ body {
   }
 }
 /* General Styles */
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-  color: #333;
-}
 
 .rent-container {
   display: flex;
@@ -1007,7 +1003,7 @@ body {
 }
 
 .bike-info {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .bike-info h1 {
@@ -1076,7 +1072,7 @@ body {
 
 .rental-price {
   font-size: 1.3rem;
-  color: #e67e22;
+  color: #007bff;
   margin-bottom: 20px;
 }
 
@@ -1249,6 +1245,58 @@ body {
   margin-top: 10px;
   font-size: 0.85rem;
   color: #28a745;
+}
+/* Custom Stripe CardElement styling */
+.stripe-card-element {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 10px;
+  font-size: 16px;
+  color: #424770;
+}
+
+/* Style for the form */
+.rental-summary form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.rental-summary label {
+  font-weight: bold;
+}
+
+.rental-summary input,
+.rental-summary textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.rental-summary button {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.rental-summary button:hover {
+  background-color: #0056b3;
+}
+.h3{
+  color: #ff6347;
 }
 /* Overall Section Styling */
 .events-section {
@@ -1628,10 +1676,15 @@ body {
 /* Header Section */
 .contact-header {
   text-align: center;
-  height: 140px;
+  height: 200px;
   padding: 30px;
   background-color: #f39c12;
   color: white;
+  background-image: url('../src/assets/contact.jpg'); /* Path to your background image */
+  /* background-size: cover; Ensures the image covers the entire area */
+  background-position: center; /* Centers the background image */
+  background-size: 1550px 347px;
+  background-repeat: no-repeat;
 }
 
 .contact-header h1 {
@@ -1781,10 +1834,14 @@ textarea {
 /* Header Section */
 .about-header {
   text-align: center;
-  height: 140px;
+  height: 200px;
   padding: 30px;
   background-color: #f39c12;
   color: white;
+  background-image: url('../src/assets/about.jpg'); /* Path to your background image */
+  background-size: 1550px 347px;
+  background-position: center; /* Centers the background image */
+
 }
 
 .about-header h1 {
@@ -2045,10 +2102,123 @@ textarea {
 }
 
 .cancel-btn {
-  background-color: #f0f0f0;
+  background-color: #e01c1c;
 }
-
+.cancel-btn .hover{
+  color: rgb(246, 47, 47);
+}
 .save-btn {
   background-color: blue;
   color: white;
+}.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+}
+
+.modal-image {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.footer {
+  background-color: #e4e4e4;
+  color: #333;
+  padding: 20px;
+  text-align: center;
+  
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-section {
+  flex: 1;
+  margin: 10px;
+  min-width: 250px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #ffcc00;
+}
+
+.footer-section p,
+.footer-section ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer-section.links li {
+  text-decoration: none;
+  color: inherit; /* Maintain the color of the parent element */
+}
+
+.footer-section.links a:hover {
+  text-decoration: none;
+  color: blue;
+   /* Optional: Add underline on hover for better user experience */
+}
+
+.footer-section a {
+  color: black;
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  border-top: 1px solid #444;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.social-icons a {
+  margin: 0 10px;
+  color: black;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.social-icons a:hover {
+  color: blue;
 }

@@ -113,7 +113,7 @@ function Rent() {
         {/* Right Section */}
         <div className="rental-summary">
           <h2>{calculateRentalDays(rentalDates.startDate, rentalDates.endDate)} Day Rental</h2>
-          <p className="rental-price">{totalPrice.toFixed(2)} Rs/Hr</p>
+          <h3 className="h3">{totalPrice.toFixed(2)} Npr</h3>
           <div className="rental-form">
   <label>Rental Dates:</label>
   <input
@@ -147,13 +147,18 @@ function Rent() {
   />
 </div>
 
-          <Link
-            to="/checkout"
-            className="checkout-btn"
-            state={{ bike, rentalDates }}
-          >
-            Checkout
-          </Link>
+<Link
+  to="/checkout"
+  className="checkout-btn"
+  state={{
+    bike,
+    rentalDates,
+    totalPrice,  // Include totalPrice here
+  }}
+>
+  Checkout
+</Link>
+
           <p className="best-price">Best price guaranteed.</p>
         </div>
       </div>
@@ -168,7 +173,7 @@ function Rent() {
               <div className="bike-card-info">
                 <h3>{bike.bike_name}</h3>
                 <p>{bike.description}</p>
-                <p className="bike-price">{bike.price} € / day</p>
+                <p className="bike-price">{bike.price} Npr / Hr</p>
                 <button onClick={() => handleBikeSelect(bike)}>
                   View Details
                 </button>

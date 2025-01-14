@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; 
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Bike4 from '../../assets/Bike4.jpg';
 import Bike5 from '../../assets/Bike5.jpg';
@@ -7,25 +7,41 @@ import Bike6 from '../../assets/Bike6.jpg';
 import { uploadImageToCloudinary } from '../../config/uploadImageToCloudinary';
 import { insertCheckoutData } from "../../services/checkoutAPI";
 
+// Helper function to calculate rental days
+const calculateRentalDays = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const timeDifference = end.getTime() - start.getTime();
+  return Math.ceil(timeDifference / (1000 * 3600 * 24)); // Convert time difference to days
+};
+
 function CheckOut() {
   const location = useLocation();
-  console.log("Location State:", location.state); // Debug: Check location state
   const navigate = useNavigate();
 
-  // Fallback to a default bike if location.state or bike is undefined
-  const bike = (location.state && location.state.bike) ? location.state.bike : {
-    bike_name: "Bajaj Pulsar 150",
-    bike_image: "/assets/default-bike.jpg",
-    description: "Standard Bike",
-    price: 11.44,
-    location: "J P Marg, Kathmandu",
+  // Extract bike details, rental dates, and price from the location state
+  const { bike, rentalDates, totalPrice } = location.state || {
+    bike: {
+      bike_name: "Bajaj Pulsar 150",
+      bike_image: "/assets/default-bike.jpg",
+      description: "Standard Bike",
+      price: 11.44,
+      location: "J P Marg, Kathmandu",
+    },
+    rentalDates: {
+      startDate: new Date().toISOString().slice(0, 10),
+      endDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().slice(0, 10),
+    },
+    totalPrice: 11.44,
   };
+
+  // Calculate rental days
+  const rentalDays = calculateRentalDays(rentalDates.startDate, rentalDates.endDate);
 
   const [userInfo, setUserInfo] = useState({
     name: "",
     phone: "",
     address: "",
-    licensePhoto: null, // Ensure license photo is set in state
   });
 
   const handleInputChange = (e) => {
@@ -42,29 +58,30 @@ function CheckOut() {
   const handleFileChange = (e) => {
     setUserInfo({ ...userInfo, licensePhoto: e.target.files[0] });
   };
-
-  const handleAccept = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
     // Check for missing fields
     if (!userInfo.name || !userInfo.phone || !userInfo.address || !userInfo.licensePhoto) {
       alert("All fields are required.");
       return;
     }
-
+  
     // Validate phone number for exactly 10 digits
     if (userInfo.phone.length !== 10) {
       alert("Phone number must be exactly 10 digits.");
       return;
     }
-
+  
     try {
       // Upload the license photo to Cloudinary
       const licenseImageUrl = await uploadImageToCloudinary(userInfo.licensePhoto);
-
+  
       if (!licenseImageUrl) {
         alert("Failed to upload license photo.");
         return;
       }
-
+  
       // Prepare the checkout data for submission
       const checkoutData = {
         name: userInfo.name,
@@ -72,23 +89,21 @@ function CheckOut() {
         address: userInfo.address,
         license: licenseImageUrl, // Cloudinary URL for license photo
         bike,
+        rentalDays,
+        totalPrice,
       };
-
+  
       // Insert checkout data into the database
       await insertCheckoutData(checkoutData);
-
-      alert("Checkout form submitted successfully!");
-      navigate("/"); // Redirect after submission
+  
+      // Redirect to payment page with totalPrice in state
+      navigate("/payment", { state: { bike, rentalDays, totalPrice } });
     } catch (error) {
       console.error("Error during checkout submission:", error);
       alert("Failed to submit checkout form. Please try again.");
     }
   };
-
-  const handleDecline = () => {
-    // Navigate to a different page or show a confirmation message
-    navigate("/"); // Example: Navigate to the home page on decline
-  };
+  
 
   const handleBikeSelect = (selectedBike) => {
     navigate("/rent", { state: { bike: selectedBike } });
@@ -151,7 +166,10 @@ function CheckOut() {
         {/* Right Section */}
         <div className="rental-summary">
           <h2>Checkout</h2>
-          <form className="checkout-form">
+          <h3 className="h3">{rentalDays} Day Rental</h3>
+          <h3 className="h3">Total Price: {totalPrice} Npr</h3>
+
+          <form className="checkout-form" onSubmit={handleSubmit}>
             <label>
               Full Name:
               <input
@@ -190,14 +208,9 @@ function CheckOut() {
                 required
               />
             </label>
-            <div className="checkout-buttons">
-              <button type="button" onClick={handleAccept} className="checkout-btn">
-                Accept
-              </button>
-              <button type="button" onClick={handleDecline} className="decline-btn">
-                Decline
-              </button>
-            </div>
+            <button type="submit" className="checkout-btn">
+              Confirm Booking
+            </button>
           </form>
         </div>
       </div>

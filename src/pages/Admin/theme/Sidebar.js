@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
+import { FaTachometerAlt, FaBicycle, FaTruck, FaSignOutAlt, FaMotorcycle, FaAddressBook, FaPen, FaListAlt, FaAvianex, FaTimes, FaClock } from "react-icons/fa"; // Importing icons
 import logo from '../../../assets/bikelogo.png'; // Assuming this is the correct path for the logo
+import { FaPeace } from "react-icons/fa6";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -20,24 +22,36 @@ const Sidebar = () => {
       </div>
 
       <ul className="sidebar-nav">
-        <li><Link to="/admin/admindashboard">Dashboard</Link></li>
-        
+        <li>
+          <Link to="/admin/admindashboard">
+            <FaTachometerAlt /> Dashboard
+          </Link>
+        </li>
+
         {/* Bike Management Section */}
         <li>
-          <Link to="/admin/bike-management">Bike Management</Link>
+          <Link to="/admin/bike-management">
+            <FaBicycle /> Bike Management
+          </Link>
           <ul className="sidebar-sub-nav">
-            <li><Link to="/admin/bike-management/add">Add Bike</Link></li>
-            <li><Link to="/admin/bike-management/view">View Bikes</Link></li>
-            <li><Link to="/admin/bike-management/available">Available Bikes</Link></li>
+            <li><Link to="/admin/bike-management/add">  <FaPen />Add Bike</Link></li>
+            <li><Link to="/admin/bike-management/view"> < FaListAlt/> View Bikes</Link></li>
+            <li><Link to="/admin/bike-management/available">< FaClock/> Available Bikes</Link></li>
           </ul>
         </li>
 
         {/* Rented Bikes Section */}
-        <li><Link to="/admin/rented-bikes">Rented Bikes</Link></li>
+        <li>
+          <Link to="/admin/rented-bikes">
+            <FaMotorcycle /> Rented Bikes
+          </Link>
+        </li>
 
         {/* Logout Button */}
         <li>
-          <Link to= "/login" className="btn btn-danger" onClick={handleLogout}>Logout</Link>
+          <Link to="/login"  onClick={handleLogout}>
+            <FaSignOutAlt /> Logout
+          </Link>
         </li>
       </ul>
     </div>
