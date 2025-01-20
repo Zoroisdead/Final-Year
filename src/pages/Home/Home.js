@@ -1,5 +1,5 @@
 // src/pages/Home/Home.js
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Navbar from '../../components/Navbar';
 import snap from "../../assets/snap.png";
 import eco from "../../assets/environmentalism.png";
@@ -8,7 +8,11 @@ import choose from "../../assets/target.png";
 import rent from "../../assets/two.png";
 import ride from "../../assets/ride.png";
 import Footer from '../../components/Footer';
+import { UserContext } from "../../UserContext"; // Import UserContext
+
 const Home = () => {
+  const { user } = useContext(UserContext); // Retrieve user from context
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,6 +33,9 @@ const Home = () => {
     alert('Form submitted!');
   };
 
+  // Log user_id in Home component
+  console.log("User ID in Home Component:", user?.id); // Use user?.id instead of user?.user_id
+
   return (
     <div className="home-container">
       <Navbar />
@@ -41,7 +48,6 @@ const Home = () => {
           <button className="cta-button">Get Started</button>
         </div>
       </section>
-
 
       {/* Features Section */}
       <section className="features">
@@ -58,7 +64,7 @@ const Home = () => {
             <p>Make a positive impact on the environment by using sustainable transportation.</p>
           </div>
           <div className="feature-item">
-            <img src={affordable} alt="Affordable" className="feature-icon" />
+            <img src={affordable} alt="Affordable Prices" className="feature-icon" />
             <h3>Affordable Prices</h3>
             <p>Get the best rental prices without compromising on quality.</p>
           </div>
@@ -70,17 +76,17 @@ const Home = () => {
         <h2 className="section-title">How It Works</h2>
         <div className="steps">
           <div className="step">
-          <img src={choose} alt="Affordable" className="feature-icon" />
+            <img src={choose} alt="Choose a Bike" className="feature-icon" />
             <h3>Choose a Bike</h3>
             <p>Select the perfect bike for your journey from our wide selection.</p>
           </div>
           <div className="step">
-          <img src={rent} alt="Affordable" className="feature-icon" />
+            <img src={rent} alt="Rent Online" className="feature-icon" />
             <h3>Rent Online</h3>
             <p>Book your bike quickly and securely through our online platform.</p>
           </div>
           <div className="step">
-          <img src={ride} alt="Affordable" className="feature-icon" />
+            <img src={ride} alt="Ride & Explore" className="feature-icon" />
             <h3>Ride & Explore</h3>
             <p>Enjoy your ride and explore the beauty of the city at your own pace.</p>
           </div>
@@ -104,8 +110,8 @@ const Home = () => {
         </div>
       </section>
 
-       {/* Contact Form */}
-       <section className="contact-form">
+      {/* Contact Form */}
+      <section className="contact-form">
         <div className="form-container">
           <h2>Send Us a Message</h2>
           <form onSubmit={handleSubmit}>
@@ -160,10 +166,9 @@ const Home = () => {
         <p>Join thousands of happy riders. Rent a bike today!</p>
         <button className="cta-button">Rent a Bike Now</button>
       </section>
-     
+
       <Footer />
     </div>
-    
   );
 };
 

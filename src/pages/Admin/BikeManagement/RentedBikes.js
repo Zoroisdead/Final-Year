@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import Modal from '../../../components/modal'; // Import the Modal component
+import React, { useEffect, useState } from "react";
+import Modal from "../../../components/modal"; // Import the Modal component
 
-const Rented = () => {
-  const [checkoutData, setCheckoutData] = useState([]);
+const RentedBikes = () => {
+  const [checkoutData, setCheckoutData] = useState([]);  // Declare state for checkout data
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false); // State for showing the modal
@@ -11,12 +11,12 @@ const Rented = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/checkout/rented');
+        const response = await fetch("http://localhost:5000/api/checkout/rented");
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error("Failed to fetch data");
         }
         const result = await response.json();
-        setCheckoutData(result.data);
+        setCheckoutData(result.data); // Set the fetched data
       } catch (error) {
         setError(error.message);
       } finally {
@@ -30,21 +30,22 @@ const Rented = () => {
   const handleAccept = async (checkoutid) => {
     try {
       const response = await fetch(`http://localhost:5000/api/checkout/accept/${checkoutid}`, {
-        method: 'POST',
+        method: "POST",
       });
-
+  
       if (!response.ok) {
-        throw new Error('Failed to accept the rental');
+        throw new Error("Failed to accept the rental");
       }
-
-      const updatedData = checkoutData.map(item =>
-        item.checkoutid === checkoutid ? { ...item, status: 'Accepted' } : item
+  
+      // Update the status locally for the admin interface
+      const updatedData = checkoutData.map((item) =>
+        item.checkoutid === checkoutid ? { ...item, status: "Accepted" } : item
       );
-      setCheckoutData(updatedData);
-
-      alert('Rental request accepted!');
+      setCheckoutData(updatedData); // Update the state with accepted rental
+  
+      alert("Rental request accepted!");
     } catch (error) {
-      alert('Error: ' + error.message);
+      alert("Error: " + error.message);
     }
   };
 
@@ -55,26 +56,26 @@ const Rented = () => {
 
   const confirmDecline = async () => {
     if (!currentCheckoutId) {
-      alert('Invalid checkoutid');
+      alert("Invalid checkoutid");
       return;
     }
 
     try {
       const response = await fetch(`http://localhost:5000/api/checkout/decline/${currentCheckoutId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to decline and delete the rental');
+        throw new Error("Failed to decline and delete the rental");
       }
 
-      const updatedData = checkoutData.filter(item => item.checkoutid !== currentCheckoutId);
-      setCheckoutData(updatedData);
+      const updatedData = checkoutData.filter((item) => item.checkoutid !== currentCheckoutId);
+      setCheckoutData(updatedData); // Update the state with the declined rental removed
 
-      // alert('Rental request declined and deleted!');
+      alert("Rental request declined and deleted!");
     } catch (error) {
-      console.error('Error in handleDecline:', error);
-      alert('Error: ' + error.message);
+      console.error("Error in handleDecline:", error);
+      alert("Error: " + error.message);
     } finally {
       setShowModal(false); // Close the modal after confirming
     }
@@ -115,25 +116,35 @@ const Rented = () => {
               <td>{item.phone}</td>
               <td>{item.address}</td>
               <td>{item.bike_name}</td>
-              <td><img src={item.bike_image} alt={item.bike_name} width="100" /></td>
-              <td>{item.price}</td>
-              <td><img src={item.license} alt={item.bike_name} width="100" /></td>
               <td>
-                <button className='btn btn-primary' onClick={() => handleAccept(item.checkoutid)}>Accept</button>
-                <button className='btn btn-danger' onClick={() => handleDecline(item.checkoutid)}>Decline</button>
+                <img src={item.bike_image} alt={item.bike_name} width="100" />
+              </td>
+              <td>{item.price}</td>
+              <td>
+                <img src={item.license} alt={item.bike_name} width="100" />
+              </td>
+              <td>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleAccept(item.checkoutid)}
+                >
+                  Accept
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleDecline(item.checkoutid)}
+                >
+                  Decline
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <Modal
-        show={showModal}
-        onClose={cancelDecline}
-        onConfirm={confirmDecline}
-      />
+      <Modal show={showModal} onClose={cancelDecline} onConfirm={confirmDecline} />
     </div>
   );
 };
 
-export default Rented;
+export default RentedBikes;

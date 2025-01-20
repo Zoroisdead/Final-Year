@@ -36,9 +36,33 @@ const deleteUser = async (email) => {
   return result; // Returns the result of the deletion operation
 };
 
+const getUserById = async (userId) => {
+  const query = 'SELECT user_id, fullname, username, email, address FROM users WHERE user_id = $1';
+  const values = [userId];
+  const result = await pool.query(query, values);
+  return result.rows[0]; // Return the user data without password
+};
+const updateUser = async (userId, updatedData) => {
+  const { fullname, username, email, address } = updatedData;
+
+  const query = `
+    UPDATE users 
+    SET fullname = $1, username = $2, email = $3, address = $4 
+    WHERE user_id = $5 
+    RETURNING user_id, fullname, username, email, address
+  `;
+  const values = [fullname, username, email, address, userId];
+
+  const result = await pool.query(query, values);
+  return result.rows[0]; // Return the updated user data
+};
+
+
 module.exports = {
   getAllUsers,
   insertUsers,
   authenticateUser,
   deleteUser,
+  getUserById,
+  updateUser
 };

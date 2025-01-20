@@ -41,32 +41,30 @@ const Login = () => {
     setSuccessMessage('');
     setLoading(true);
 
-    // Validate inputs
     if (!validateInputs()) {
       setLoading(false);
       return;
     }
 
-    // Check for manual admin login
     if (formData.email === 'admin' && formData.password === 'admin') {
       const adminUser = {
+        id: 'admin',
         email: 'admin',
+        name: 'Admin',
         role: 'admin',
       };
 
-      login(adminUser); // Update context with admin data
-      localStorage.setItem('token', 'admin-token'); // Simulating a token for admin login
-      localStorage.setItem('userId', 'admin'); // Save admin user ID
+      console.log("Admin User:", adminUser); // Log admin user data
+      login(adminUser); // Save admin details in context
+      localStorage.setItem('token', 'admin-token'); // Simulate token for admin
+      localStorage.setItem('userId', adminUser.id);
 
       setSuccessMessage('Admin login successful! Redirecting...');
-      setTimeout(() => {
-        navigate('/admin'); // Redirect to admin dashboard
-      }, 1000);
+      setTimeout(() => navigate('/admin'), 1000);
       setLoading(false);
       return;
     }
 
-    // API call for regular user login
     try {
       const response = await axios.post('http://localhost:5000/api/users/login', {
         email: formData.email,
@@ -74,15 +72,13 @@ const Login = () => {
       });
 
       const { token, user } = response.data;
-
-      login(user); // Update context with user data
+      console.log("User Data on Login:", user); // Log user data on login
+      login(user); // Save user details in context
       localStorage.setItem('token', token);
-      localStorage.setItem('userId', user.id); // Save user ID in localStorage
+      localStorage.setItem('userId', user.id);
 
       setSuccessMessage('Login successful! Redirecting...');
-      setTimeout(() => {
-        navigate('/'); // Redirect to home page
-      }, 1000);
+      setTimeout(() => navigate('/'), 1000);
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid Email or Password.');
     } finally {

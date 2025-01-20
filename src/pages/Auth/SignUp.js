@@ -49,12 +49,12 @@ const SignUp = () => {
     }
 
     try {
-      // Insert new user, including user_id if logged in
+      // Insert new user, safely handling user_id if logged in
       const response = await insertAllUsers({ 
         username, 
         email, 
         password,
-        user_id: user ? user.id : null // Link the user_id if logged in
+        user_id: user?.userId || null // Safely access userId
       });
       
       setSuccessMessage("Signup successful! Redirecting to login...");

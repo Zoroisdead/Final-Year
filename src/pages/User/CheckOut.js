@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Bike4 from '../../assets/Bike4.jpg';
@@ -19,7 +19,7 @@ function CheckOut() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Extract bike details, rental dates, and price from the location state
+  // Extract bike details, rental dates, totalPrice, and userId from location state
   const { bike, rentalDates, totalPrice } = location.state || {
     bike: {
       bike_name: "Bajaj Pulsar 150",
@@ -42,7 +42,17 @@ function CheckOut() {
     name: "",
     phone: "",
     address: "",
+    licensePhoto: null,
   });
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      console.log("User ID in CheckOut Component:", user.id); // Debugging line
+    } else {
+      console.error("No user found in localStorage.");
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -58,52 +68,56 @@ function CheckOut() {
   const handleFileChange = (e) => {
     setUserInfo({ ...userInfo, licensePhoto: e.target.files[0] });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Check for missing fields
+    
     if (!userInfo.name || !userInfo.phone || !userInfo.address || !userInfo.licensePhoto) {
       alert("All fields are required.");
       return;
     }
-  
-    // Validate phone number for exactly 10 digits
+    
     if (userInfo.phone.length !== 10) {
       alert("Phone number must be exactly 10 digits.");
       return;
     }
-  
+
     try {
-      // Upload the license photo to Cloudinary
       const licenseImageUrl = await uploadImageToCloudinary(userInfo.licensePhoto);
-  
+      
       if (!licenseImageUrl) {
         alert("Failed to upload license photo.");
         return;
       }
-  
-      // Prepare the checkout data for submission
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userId = user ? user.id : null;  // Ensure this is not null
+
+      console.log("User ID before submitting:", userId);  // Check this in the console
+
+      if (!userId) {
+        alert("User not logged in or invalid user ID.");
+        return;
+      }
+
       const checkoutData = {
         name: userInfo.name,
         phone: userInfo.phone,
         address: userInfo.address,
-        license: licenseImageUrl, // Cloudinary URL for license photo
+        license: licenseImageUrl,
         bike,
         rentalDays,
         totalPrice,
+        user_id: userId,  // Ensure this is correctly assigned
       };
-  
-      // Insert checkout data into the database
+
       await insertCheckoutData(checkoutData);
-  
-      // Redirect to payment page with totalPrice in state
       navigate("/payment", { state: { bike, rentalDays, totalPrice } });
     } catch (error) {
       console.error("Error during checkout submission:", error);
       alert("Failed to submit checkout form. Please try again.");
     }
   };
-  
 
   const handleBikeSelect = (selectedBike) => {
     navigate("/rent", { state: { bike: selectedBike } });

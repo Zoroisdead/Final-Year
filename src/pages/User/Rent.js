@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { Link } from "react-router-dom";
 import Bike4 from '../../assets/Bike4.jpg';
 import Bike5 from '../../assets/Bike5.jpg';
 import Bike6 from '../../assets/Bike6.jpg';
+import { UserContext } from "../../UserContext"; // Import UserContext
 
 function Rent() {
   const location = useLocation();
@@ -23,7 +24,6 @@ function Rent() {
     pickupTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }), // Current time in HH:MM format
     dropoffTime: "10:00",
   });
-  
 
   const [totalPrice, setTotalPrice] = useState(bike.price); // Initialize with the daily price
 
@@ -80,6 +80,11 @@ function Rent() {
     navigate("/rent", { state: { bike: selectedBike } });
   };
 
+  // Get user data from context
+  const { user } = useContext(UserContext);
+
+  console.log("User ID in Rent Component:", user?.id); // Log user id in Rent component
+
   return (
     <div>
       <Navbar />
@@ -115,49 +120,50 @@ function Rent() {
           <h2>{calculateRentalDays(rentalDates.startDate, rentalDates.endDate)} Day Rental</h2>
           <h3 className="h3">{totalPrice.toFixed(2)} Npr</h3>
           <div className="rental-form">
-  <label>Rental Dates:</label>
-  <input
-    type="date"
-    name="startDate"
-    value={rentalDates.startDate}
-    onChange={handleDateChange}
-    min={new Date().toISOString().slice(0, 10)} // Prevent past dates
-  />
-  to
-  <input
-    type="date"
-    name="endDate"
-    value={rentalDates.endDate}
-    onChange={handleDateChange}
-    min={rentalDates.startDate} // Prevent selecting dates before the start date
-  />
-  <label>Pickup:</label>
-  <input
-    type="time"
-    name="pickupTime"
-    value={rentalDates.pickupTime}
-    onChange={handleDateChange}
-  />
-  <label>Dropoff:</label>
-  <input
-    type="time"
-    name="dropoffTime"
-    value={rentalDates.dropoffTime}
-    onChange={handleDateChange}
-  />
-</div>
+            <label>Rental Dates:</label>
+            <input
+              type="date"
+              name="startDate"
+              value={rentalDates.startDate}
+              onChange={handleDateChange}
+              min={new Date().toISOString().slice(0, 10)} // Prevent past dates
+            />
+            to
+            <input
+              type="date"
+              name="endDate"
+              value={rentalDates.endDate}
+              onChange={handleDateChange}
+              min={rentalDates.startDate} // Prevent selecting dates before the start date
+            />
+            <label>Pickup:</label>
+            <input
+              type="time"
+              name="pickupTime"
+              value={rentalDates.pickupTime}
+              onChange={handleDateChange}
+            />
+            <label>Dropoff:</label>
+            <input
+              type="time"
+              name="dropoffTime"
+              value={rentalDates.dropoffTime}
+              onChange={handleDateChange}
+            />
+          </div>
 
-<Link
-  to="/checkout"
-  className="checkout-btn"
-  state={{
-    bike,
-    rentalDates,
-    totalPrice,  // Include totalPrice here
-  }}
->
-  Checkout
-</Link>
+          <Link
+            to="/checkout"
+            className="checkout-btn"
+            state={{
+              bike,
+              rentalDates,
+              totalPrice,
+              userId: user?.id, // Pass user id directly from context
+            }}
+          >
+            Checkout
+          </Link>
 
           <p className="best-price">Best price guaranteed.</p>
         </div>

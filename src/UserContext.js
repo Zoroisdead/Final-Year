@@ -1,4 +1,3 @@
-// src/UserContext.js
 import React, { createContext, useState, useEffect } from 'react';
 
 // Create the UserContext
@@ -12,11 +11,13 @@ const UserProvider = ({ children }) => {
     if (userData) {
       setUser(JSON.parse(userData));
     }
+    console.log("User Data from LocalStorage:", userData); // Log user data from local storage
   }, []);
 
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
+    console.log("User Data after Login:", userData); // Log user data after login
   };
 
   const logout = () => {

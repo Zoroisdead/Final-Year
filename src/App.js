@@ -34,6 +34,7 @@ import RentedBikes from "./pages/Admin/BikeManagement/RentedBikes";
 import AdminDashboard from './pages/Admin/BikeManagement/AdminDahboard';
 import UserProfile from './pages/User/UserProfile';
 import Payment from './pages/User/Payment';
+import Booking from './pages/User/Booking';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/eventsinfo" element={<EventInfo />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/booking" element={<Booking />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/footer" element={<Footer />} />
 

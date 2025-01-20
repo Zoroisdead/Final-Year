@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Footer from "../../components/Footer";
+import { UserContext } from "../../UserContext"; // Import UserContext
 
 function ExploreBikes() {
   const [bikes, setBikes] = useState([]);
@@ -10,6 +11,7 @@ function ExploreBikes() {
   const [minPrice, setMinPrice] = useState(0); // Min price state
   const [maxPrice, setMaxPrice] = useState(5000); // Max price state
   const navigate = useNavigate(); // Use useNavigate hook for navigation
+  const { user } = useContext(UserContext); // Retrieve user from context
 
   // Fetch bike data from mock API
   useEffect(() => {
@@ -29,8 +31,7 @@ function ExploreBikes() {
   // Filter bikes based on search query and price range
   const filteredBikes = bikes.filter((bike) => {
     const matchesSearch = bike.bike_name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesPrice =
-      bike.price >= minPrice && bike.price <= maxPrice; // Filter by price range
+    const matchesPrice = bike.price >= minPrice && bike.price <= maxPrice; // Filter by price range
 
     return matchesSearch && matchesPrice; // Ensure both conditions are met
   });
@@ -40,7 +41,7 @@ function ExploreBikes() {
 
   const handleRentNow = (bike) => {
     // Redirect to Rent.js page and pass bike details via state
-    navigate("/rent", { state: { bike } });
+    navigate("/rent", { state: { bike, userId: user?.id } }); // Pass userId
   };
 
   return (

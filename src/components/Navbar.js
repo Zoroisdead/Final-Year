@@ -1,10 +1,9 @@
-// src/components/Navbar.js
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import profile from '../assets/userprofile.png';
 import bikelogo from '../assets/bikelogo.png';
-import cart from '../assets/trolley.png';
+
 const Navbar = () => {
   const { user, logout } = useContext(UserContext);
 
@@ -37,10 +36,10 @@ const Navbar = () => {
       <div className="navbar-right">
         {user ? (
           <>
+            <span className="username"> {user.username}!</span>
             <Link to="/profile" className="profile-btn">
-              <img src={profile}  alt="User Profile" className="profile-icon" />
+              <img src={profile} alt="User Profile" className="profile-icon" />
             </Link>
-           
             <button onClick={logout} className="logout-btn">
               Logout
             </button>

@@ -1,32 +1,32 @@
 const pool = require('../db');
-const { insertCheckoutData } = require('../models/CheckoutModel'); // Assume you have a model for checkout
+const { insertCheckoutData } = require('../models/CheckoutModel'); // Ensure you have a model for checkout
 
 // Function to handle the checkout data
 const checkout = async (req, res) => {
-  const { name, phone, address, bike, license:licenseImageUrl } = req.body;  // Assume `userId` is sent from the frontend
+  const { name, phone, address, bike, license: licenseImageUrl, user_id } = req.body;
+  console.log("Received user ID in backend:", user_id); // Debugging line
 
   try {
-    // Insert checkout data into the database with userId
     const checkoutData = {
-    //   user_id: userId, // Link checkout to the user
+      user_id,
       name,
       phone,
       address,
       bike_name: bike.bike_name,
       bike_image: bike.bike_image,
       price: bike.price,
-      license: licenseImageUrl, // Assuming you've uploaded the license image to Cloudinary
+      license: licenseImageUrl,
     };
 
-    // Save the data into the database (assuming `insertCheckoutData` is a function in the model)
-    await insertCheckoutData(checkoutData);
-
-    res.status(200).json({ message: 'Checkout successful' });
+    const insertedData = await insertCheckoutData(checkoutData);
+    res.status(200).json({ message: 'Checkout successful', data: insertedData });
   } catch (error) {
     console.error('Error during checkout:', error);
     res.status(500).json({ message: 'Failed to process checkout' });
   }
 };
+
+
 const deleteCheckoutData = async (req, res) => {
   const { checkoutid } = req.params; // Ensure it's checkoutid not id if your table uses checkoutid
 
@@ -50,9 +50,29 @@ const deleteCheckoutData = async (req, res) => {
   }
 };
 
+const acceptCheckoutData = async (req, res) => {
+  const { checkoutid } = req.params;
 
+  try {
+    // Update the status of the rental in the database
+    const query = 'UPDATE checkout SET status = $1 WHERE checkoutid = $2 RETURNING *';
+    const values = ['Accepted', checkoutid];
+
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ success: false, message: 'Rental request not found.' });
+    }
+
+    res.status(200).json({ success: true, message: 'Rental request accepted.', data: result.rows[0] });
+  } catch (error) {
+    console.error('Error accepting rental request:', error.message);
+    res.status(500).json({ success: false, error: 'Failed to accept rental request.' });
+  }
+};
 
 module.exports = {
   checkout,
-  deleteCheckoutData
+  deleteCheckoutData,
+  acceptCheckoutData,
 };

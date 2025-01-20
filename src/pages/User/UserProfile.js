@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar";
+import { Link } from "react-router-dom";
+
+import Booking from "./Booking";
 
 const UserProfile = () => {
   const [formData, setFormData] = useState({
@@ -30,11 +33,10 @@ const UserProfile = () => {
       <div className="user-profile">
         <div className="profile-sidebar">
           <h3>Manage My Account</h3>
-          <ul>
-            <li className="active">My Profile</li>
-            <li>My Bookings</li>
-            <li>My Cancellations</li>
-            <li>My Payment Options</li>
+          <ul className="usersiderbar" >
+            <Link to="/profile">My Profile</Link>
+            <Link to="/booking">Booking</Link>
+            <Link to="">Change Password</Link>
           </ul>
         </div>
 
@@ -43,23 +45,15 @@ const UserProfile = () => {
           <form onSubmit={handleSubmit}>
             <div className="form-row">
               <div className="form-group">
-                <label>First Name</label>
+                <label>User Name</label>
                 <input
                   type="text"
-                  name="firstName"
+                  Username="UserName"
                   value={formData.firstName}
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="form-group">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                />
-              </div>
+
             </div>
 
             <div className="form-row">
@@ -108,7 +102,7 @@ const UserProfile = () => {
                 />
               </div>
             </div> */}
-{/* 
+            {/* 
             <div className="form-row">
               <div className="form-group">
                 <label>New Password</label>

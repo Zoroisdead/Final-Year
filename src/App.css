@@ -2222,3 +2222,117 @@ button:hover {
 .social-icons a:hover {
   color: blue;
 }
+.booking-container {
+  padding: 20px;
+}
+
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.booking-table th,
+.booking-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.status-accepted {
+  color: green;
+  font-weight: bold;
+}
+
+.status-declined {
+  color: red;
+  font-weight: bold;
+}
+/* Username Styling */
+.username {
+  font-size: 1rem; /* Adjust size */
+   /* Make it bold */
+  color: white; /* Choose a green color for emphasis */
+  margin-left: 10px; /* Add spacing if needed */
+  display: inline-block; /* Ensure proper layout */
+  margin-top: 13px;
+}
+
+
+/* Sidebar container */
+.usersiderbar {
+  list-style: none; /* Remove default list style */
+  padding: 0;
+  margin: 0;
+}
+
+/* Sidebar link styles */
+.usersiderbar a {
+  display: block; /* Makes the links block-level, stacking them vertically */
+  text-decoration: none;
+  color: #333; /* Set link text color */
+  padding: 10px 15px;
+  margin-bottom: 10px; /* Add space between links */
+  border-radius: 4px;
+  background-color: #f4f4f4;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for links */
+.usersiderbar a:hover {
+  background-color: #007bff;
+  color: white; /* Change text color on hover */
+  transform: translateY(-2px);
+}
+/* Styling for the accepted bookings table */
+.accepted-bookings-table {
+  width: 75%;
+  border-collapse: collapse;
+  margin: -4px 0;
+  font-size: 16px;
+  text-align: left;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.accepted-bookings-table thead th {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.accepted-bookings-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.accepted-bookings-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.accepted-bookings-table tbody tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.accepted-bookings-table td {
+  padding: 12px 16px;
+  vertical-align: middle;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.accepted-bookings-table td img {
+  display: block;
+  max-width: 80px;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.status-accepted {
+  color: #4caf50;
+  font-weight: bold;
+  text-transform: capitalize;
+}

@@ -13,6 +13,8 @@ router.post('/', userController.addUser);
 router.post('/login', userController.loginUser);
 // Backend route to delete user
 
+router.get('/:userId', userController.getUserById);
 
-
+// Route to update user data
+router.put('/:userId', userController.updateUser);
 module.exports = router;
